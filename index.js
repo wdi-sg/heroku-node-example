@@ -51,7 +51,7 @@ app.get('/', (request, response) => {
       pokemon: queryResult.rows
     };
 
-    response.render('home', context);
+    response.render('Home', context);
   });
 });
 
