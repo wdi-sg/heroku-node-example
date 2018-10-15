@@ -33,6 +33,10 @@ app.engine('jsx', reactEngine);
 // Import routes to match incoming requests
 require('./routes')(app, db);
 
+app.get('/dinosaur', (request, response) => {
+    response.send("WORKSSSSSSSSS BANANA")
+});
+
 // Root GET request (it doesn't belong in any controller file)
 app.get('/', (request, response) => {
   let loggedIn = request.cookies['loggedIn'];
