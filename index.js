@@ -34,7 +34,7 @@ if( process.env.DATABASE_URL ){
   var configs = {
       user: 'akira',
       host: '127.0.0.1',
-      database: 'pokemons',
+      database: 'testdb',
       port: 5432
   };
 }
@@ -47,7 +47,7 @@ const app = express();
 // Root GET request (it doesn't belong in any controller file)
 app.get('/', (request, response) => {
 
-  pool('SELECT * FROM pokemon', (error, queryResult) => {
+  pool.query('SELECT * FROM pokemon', (error, queryResult) => {
     if (error) console.error('error!', error);
 
     let context = {
