@@ -7,7 +7,7 @@ We will also be introducing a Users table so users can create accounts on the ap
 ## Getting Started
 
 1.  Fork and clone this repository to your computer
-2.  Run `yarn install` to install dependencies
+2.  Run `npm install` to install dependencies
 3.  Create a new Postgres database by running `createdb pokemons -U <your_username>`
 4.  Run `psql -U <your_username> -d pokemons -a -f tables.sql` - this will create 2 new tables for you - a `pokemons` table and `users` table in the database
 5.  Seed data into the newly created `pokemons` table by running `psql -U <your_username> -d pokemons -a -f seed.sql` (Note: this will run 3 INSERT queries to seed 3 pokemons into the table.)
