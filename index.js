@@ -62,6 +62,10 @@ app.set('views', __dirname + '/views');
 // this line sets react to be the default view engine
 app.set('view engine', 'jsx');
 
+app.get('/cats', (request, response) => {
+  response.send('WOW CATS')
+});
+
 
 app.get('/banana', (request, response) => {
   response.render('banana')
