@@ -34,7 +34,7 @@ if( process.env.DATABASE_URL ){
   var configs = {
       user: 'akira',
       host: '127.0.0.1',
-      database: 'testdb',
+      database: 'sei20',
       port: 5432
   };
 }
@@ -44,17 +44,90 @@ const pool = new pg.Pool(configs);
 // Init express app
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+
+
+
+// this line below, sets a layout look to your express project
+const reactEngine = require('express-react-views').createEngine();
+app.engine('jsx', reactEngine);
+
+// this tells express where to look for the view files
+app.set('views', __dirname + '/views');
+
+// this line sets react to be the default view engine
+app.set('view engine', 'jsx');
+
+
+app.get('/banana', (request, response) => {
+  response.render('banana')
+});
+
+app.post('/save', (request, response) => {
+  const values = [request.body.name];
+  pool.query('INSERT INTO products (name) VALUES ($1) RETURNING *',values, (error, queryResult) => {
+    if (error) console.error('error!', error);
+
+    response.send(queryResult.rows);
+
+  });
+});
+
+
+app.get('/apple', (request, response) => {
+
+  let query = "SELECT * FROM products WHERE name='"+request.query.id+"'";
+  query = "SELECT * FROM products WHERE name=$1";
+
+
+  console.log("QUERY");
+  console.log( query );
+
+  const values = [request.query.id]
+
+  pool.query(query,values, (error, queryResult) => {
+    if (error) console.error('error!', error);
+
+    console.log( "DB RESULT" );
+    console.log( queryResult.rows );
+
+    response.send(queryResult.rows);
+  });
+});
+
+
+
+
+
+
+
 // Root GET request (it doesn't belong in any controller file)
 app.get('/', (request, response) => {
 
-  pool.query('SELECT * FROM pokemon', (error, queryResult) => {
+  pool.query('SELECT * FROM products', (error, queryResult) => {
     if (error) console.error('error!', error);
 
-    let context = {
-      pokemon: queryResult.rows
-    };
+    console.log( "DB RESULT" );
+    console.log( queryResult.rows );
+    const lastItem = queryResult.rows[ queryResult.rows.length-1 ];
 
-    response.send(context);
+    let my_response = "<html>";
+
+    my_response = my_response + "<body>";
+    my_response = my_response + "<h1>HEY HTML</h1>";
+    my_response = my_response + "<h3>name "+lastItem.name+"</h3>";
+    my_response = my_response + "</body>";
+    my_response = my_response + "</html>";
+
+    // response.send(my_response);
+    const data = {
+      name : lastItem.name
+    }
+    response.render('root',data);
   });
 });
 
